@@ -1,12 +1,14 @@
 package com.Bean;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
 @Component
-public class User implements Serializable{
+public class User implements Serializable {
     private static final long serialVersionUID = -4276871359547291944L;
 
     private Long id;
@@ -62,5 +64,16 @@ public class User implements Serializable{
 
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
+    }
+
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("email", email)
+                .append("birthday", birthday)
+                .toString();
     }
 }

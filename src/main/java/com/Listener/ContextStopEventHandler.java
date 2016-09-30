@@ -23,7 +23,7 @@ public class ContextStopEventHandler implements ApplicationListener<ContextClose
     @Autowired
     private FileScanner scanner;
     @Autowired
-    private ScanSettings settings;
+    private ScanSettings scanSettings;
     @Autowired
     private User user;
 
@@ -38,15 +38,19 @@ public class ContextStopEventHandler implements ApplicationListener<ContextClose
 
     @Override
     public void onApplicationEvent(ContextClosedEvent contextClosedEvent) {
+        //try to read the directory where will be saved settings
         File recDir = new File(recoveryDir);
+        //if the application is started for the first time, create the directory using system property user.dir
         if (!recDir.exists()) {
             boolean created = recDir.mkdir();
             LOGGER.debug("Was a recovery directory created ---> " + created);
             LOGGER.debug("Absolute path of the created directory is ---> " + recDir);
         }
 
+        //get the current scanned files
         Map<String, Long> fileMap = scanner.getFileMap();
 
+        //if it's not empty, serialize it
         if (!fileMap.isEmpty()) {
             try (ObjectOutputStream objectInputStream = new ObjectOutputStream(
                     new BufferedOutputStream(
@@ -59,21 +63,23 @@ public class ContextStopEventHandler implements ApplicationListener<ContextClose
             }
         }
 
-        if (settings.getWorkDirectory() != null) {
+        //serialize scan settings
+        if (scanSettings.getWorkDirectory() != null) {
             try (ObjectOutputStream objectInputStream = new ObjectOutputStream(
                     new BufferedOutputStream(
                             new FileOutputStream(
                                     new File(recDir, userSettingsFile))))) {
-                if (settings.getLocale() == null) {
-                    settings.setLocale(LocaleContextHolder.getLocale());
+                if (scanSettings.getLocale() == null) {
+                    scanSettings.setLocale(LocaleContextHolder.getLocale());
                 }
-                objectInputStream.writeObject(settings);
+                objectInputStream.writeObject(scanSettings);
                 objectInputStream.flush();
             } catch (IOException e) {
                 LOGGER.info("Something has gone wrong: " + e);
             }
         }
 
+        //serialize user
         if (user.getId() != null) {
             try (ObjectOutputStream objectInputStream = new ObjectOutputStream(
                     new BufferedOutputStream(

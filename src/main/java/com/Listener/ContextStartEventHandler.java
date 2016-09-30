@@ -45,12 +45,12 @@ public class ContextStartEventHandler implements ApplicationListener<ContextStar
         File mapFile = new File(recoveryDir, scannedFilesFile);
         if (mapFile.exists() && mapFile.length() > 0) {
             try {
-                Map<String, Long> deserialize = SerializationUtils.<Map<String, Long>>deserialize(
+                Map<String, Long> deserializeMap = SerializationUtils.<Map<String, Long>>deserialize(
                         new BufferedInputStream(
                                 new FileInputStream(mapFile)));
-                scanner.setFileMap(deserialize);
+                scanner.setFileMap(deserializeMap);
 
-                LOGGER.debug("File map has a size: " + deserialize.size());
+                LOGGER.debug("File map has a size: " + deserializeMap.size());
             } catch (FileNotFoundException e) {
                 /*existence has been verified*/
                 LOGGER.info("Something has gone wrong when the previous scanned files map has been read: " + e);
@@ -58,41 +58,39 @@ public class ContextStartEventHandler implements ApplicationListener<ContextStar
         }
 
         //get the scanning settings
-        File file = new File(recoveryDir, userSettingsFile);
-        if (file.exists() && file.length() > 0) {
+        File scanSettingsFile = new File(recoveryDir, userSettingsFile);
+        if (scanSettingsFile.exists() && scanSettingsFile.length() > 0) {
             try {
-                ScanSettings deserialize = SerializationUtils.<ScanSettings>deserialize(
+                ScanSettings deserializeScanSettings = SerializationUtils.<ScanSettings>deserialize(
                         new BufferedInputStream(
-                                new FileInputStream(file)));
-                LOGGER.info(deserialize);
-                scanSettings.setWorkDirectory(deserialize.getWorkDirectory());
-                scanSettings.setFileExtension(deserialize.getFileExtension());
-                scanSettings.setScanTimeOut(deserialize.getScanTimeOut());
-                scanSettings.setTimeUnit(deserialize.getTimeUnit());
-                scanSettings.setLocale(deserialize.getLocale());
+                                new FileInputStream(scanSettingsFile)));
+                LOGGER.debug(deserializeScanSettings);
+                scanSettings.setWorkDirectory(deserializeScanSettings.getWorkDirectory());
+                scanSettings.setFileExtension(deserializeScanSettings.getFileExtension());
+                scanSettings.setScanTimeOut(deserializeScanSettings.getScanTimeOut());
+                scanSettings.setTimeUnit(deserializeScanSettings.getTimeUnit());
+                scanSettings.setLocale(deserializeScanSettings.getLocale());
             } catch (FileNotFoundException e) {
                 /*existence has been verified*/
-                LOGGER.info("Something has gone wrong when the user settings file has been read: " + e);
+                LOGGER.info("Something has gone wrong when the user settings scanSettingsFile has been read: " + e);
             }
         }
 
-        //Get the user settings
+        //get the user settings
         File userFile = new File(recoveryDir, this.userFile);
         if (userFile.exists() && userFile.length() > 0) {
             try {
-                User deserialize = SerializationUtils.<User>deserialize(
+                User deserializeUser = SerializationUtils.<User>deserialize(
                         new BufferedInputStream(
                                 new FileInputStream(userFile)));
-                LOGGER.info("User name: " + deserialize.getName());
-                LOGGER.info("User email: " + deserialize.getEmail());
-                LOGGER.info("User birthday: " + deserialize.getBirthday());
-                user.setId(deserialize.getId());
-                user.setName(deserialize.getName());
-                user.setEmail(deserialize.getEmail());
-                user.setBirthday(deserialize.getBirthday());
+                LOGGER.debug(deserializeUser);
+                user.setId(deserializeUser.getId());
+                user.setName(deserializeUser.getName());
+                user.setEmail(deserializeUser.getEmail());
+                user.setBirthday(deserializeUser.getBirthday());
             } catch (FileNotFoundException e) {
                 /*existence has been verified*/
-                LOGGER.info("Something has gone wrong when the user file has been read: " + e);
+                LOGGER.info("Something has gone wrong when the user scanSettingsFile has been read: " + e);
             }
         }
     }

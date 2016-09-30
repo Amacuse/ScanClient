@@ -17,116 +17,102 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
     </rowConstraints>
-    <children>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
-            <children>
-                <Button fx:id="btnChooseDirectory" layoutX="14.0" layoutY="5.0" mnemonicParsing="false"
-                        onAction="#chooseDirectory" text="Choose directory">
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </padding>
-                </Button>
-            </children>
-        </AnchorPane>
-        <Label fx:id="lbWorkDir" text="Work directory">
-            <GridPane.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-            </GridPane.margin>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+        <Button fx:id="btnChooseDirectory" layoutX="14.0" layoutY="5.0" mnemonicParsing="false"
+                onAction="#chooseDirectory" text="Choose directory">
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-            </padding>
-        </Label>
-        <Label fx:id="lbFileExt" text="File extension" GridPane.rowIndex="1">
-            <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-            </padding>
-            <GridPane.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-            </GridPane.margin>
-        </Label>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <children>
-                <TextField fx:id="txtExtension" layoutX="6.0" layoutY="21.0" promptText="File extension like 'txt'">
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </padding>
-                </TextField>
-                <Label fx:id="extensionValidate" layoutX="6.0" layoutY="51.0" textFill="#eb1515"/>
-            </children>
-        </AnchorPane>
-        <Label fx:id="lbScanTime" text="Scan time out" GridPane.rowIndex="2">
-            <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-            </padding>
-            <GridPane.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-            </GridPane.margin>
-        </Label>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <children>
-                <TextField fx:id="txtScanTime" layoutX="6.0" layoutY="21.0" promptText="Periodicity of scan">
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </padding>
-                </TextField>
-                <Label fx:id="timeOutValidate" layoutX="6.0" layoutY="51.0" textFill="#eb1515"/>
-            </children>
-            <GridPane.margin>
-                <Insets/>
-            </GridPane.margin>
-        </AnchorPane>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-            <children>
-                <RadioButton fx:id="chSec" mnemonicParsing="false" onAction="#setTimeUnitForScanTime" text="sec">
-                    <toggleGroup>
-                        <ToggleGroup fx:id="toggleGroup"/>
-                    </toggleGroup>
-                </RadioButton>
-                <RadioButton fx:id="chMin" layoutX="49.0" mnemonicParsing="false" onAction="#setTimeUnitForScanTime"
-                             text="min" toggleGroup="$toggleGroup">
-                    <padding>
-                        <Insets left="5.0"/>
-                    </padding>
-                </RadioButton>
-                <RadioButton fx:id="chHr" layoutX="107.0" mnemonicParsing="false" onAction="#setTimeUnitForScanTime"
-                             text="hr" toggleGroup="$toggleGroup">
-                    <padding>
-                        <Insets left="5.0"/>
-                    </padding>
-                </RadioButton>
-            </children>
-            <GridPane.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-            </GridPane.margin>
-        </AnchorPane>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-            <children>
-                <TextField fx:id="txtDirectory" editable="false" layoutX="6.0" layoutY="21.0">
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </padding>
-                </TextField>
-                <Label fx:id="directoryValidate" layoutX="6.0" layoutY="51.0" textFill="#eb1515"/>
-            </children>
-        </AnchorPane>
-        <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-            <children>
-                <Button fx:id="btnOk" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                        onAction="#setSettings" prefHeight="32.0" prefWidth="32.0">
-                    <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </HBox.margin>
-                </Button>
-                <Button fx:id="btnCancel" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                        onAction="#setSettings" prefHeight="32.0" prefWidth="32.0">
-                    <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </HBox.margin>
-                </Button>
-            </children>
-            <GridPane.margin>
-                <Insets/>
-            </GridPane.margin>
-        </HBox>
-    </children>
+            </padding>
+        </Button>
+    </AnchorPane>
+    <Label fx:id="lbWorkDir" text="Work directory">
+        <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </GridPane.margin>
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+    </Label>
+    <Label fx:id="lbFileExt" text="File extension" GridPane.rowIndex="1">
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </GridPane.margin>
+    </Label>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField fx:id="txtExtension" layoutX="6.0" layoutY="21.0" promptText="File extension like 'txt'">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </TextField>
+        <Label fx:id="extensionValidate" layoutX="6.0" layoutY="51.0" textFill="#eb1515"/>
+    </AnchorPane>
+    <Label fx:id="lbScanTime" text="Scan time out" GridPane.rowIndex="2">
+        <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </padding>
+        <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        </GridPane.margin>
+    </Label>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <GridPane.margin>
+            <Insets/>
+        </GridPane.margin>
+        <TextField fx:id="txtScanTime" layoutX="6.0" layoutY="21.0" promptText="Periodicity of scan">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </TextField>
+        <Label fx:id="timeOutValidate" layoutX="6.0" layoutY="51.0" textFill="#eb1515"/>
+    </AnchorPane>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <GridPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </GridPane.margin>
+        <RadioButton fx:id="chSec" mnemonicParsing="false" onAction="#setTimeUnitForScanTime" text="sec">
+            <toggleGroup>
+                <ToggleGroup fx:id="toggleGroup"/>
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="chMin" layoutX="49.0" mnemonicParsing="false" onAction="#setTimeUnitForScanTime"
+                     text="min" toggleGroup="$toggleGroup">
+            <padding>
+                <Insets left="5.0"/>
+            </padding>
+        </RadioButton>
+        <RadioButton fx:id="chHr" layoutX="107.0" mnemonicParsing="false" onAction="#setTimeUnitForScanTime"
+                     text="hr" toggleGroup="$toggleGroup">
+            <padding>
+                <Insets left="5.0"/>
+            </padding>
+        </RadioButton>
+    </AnchorPane>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+        <TextField fx:id="txtDirectory" editable="false" layoutX="6.0" layoutY="21.0">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </TextField>
+        <Label fx:id="directoryValidate" layoutX="6.0" layoutY="51.0" textFill="#eb1515"/>
+    </AnchorPane>
+    <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <GridPane.margin>
+            <Insets/>
+        </GridPane.margin>
+        <Button fx:id="btnOk" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                onAction="#setSettings" prefHeight="32.0" prefWidth="32.0">
+            <HBox.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </HBox.margin>
+        </Button>
+        <Button fx:id="btnCancel" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                onAction="#setSettings" prefHeight="32.0" prefWidth="32.0">
+            <HBox.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </HBox.margin>
+        </Button>
+    </HBox>
 </GridPane>
