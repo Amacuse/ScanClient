@@ -19,6 +19,7 @@ public class SpringFxmlLoader {
 
         try (InputStream fxmlInput = getClass().getResourceAsStream(url)) {
             FXMLLoader loader = new FXMLLoader();
+            //populate the FXML context with spring beans
             loader.setControllerFactory(new Callback<Class<?>, Object>() {
                 @Override
                 public Object call(Class<?> clazz) {

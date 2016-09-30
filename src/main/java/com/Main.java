@@ -17,6 +17,9 @@ public class Main extends Application {
     private static final int MIN_HEIGHT = 470;
     private static final int MIN_WIDTH = 450;
 
+    /**
+     * The primary point of entry into the program
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = (Parent) LOADER.load("/fx/main.fxml");
@@ -28,6 +31,9 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    /**
+     * The process which should be done before program is stopped
+     */
     @Override
     public void stop() throws Exception {
         ThreadPoolExecutor service = SpringFxmlLoader.getContext().getBean("service", ThreadPoolExecutor.class);
