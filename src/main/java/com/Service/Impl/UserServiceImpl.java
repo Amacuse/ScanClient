@@ -1,7 +1,7 @@
 package com.Service.Impl;
 
 import com.Bean.User;
-import com.Exception.Handler.ExceptionHandler;
+import com.ExceptionHandler.ExceptionHandler;
 import com.Service.Interface.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

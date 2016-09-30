@@ -1,4 +1,4 @@
-package com.Exception.Handler;
+package com.ExceptionHandler;
 
 import com.Controller.MainController;
 import javafx.application.Platform;
@@ -28,6 +28,9 @@ public class ExceptionHandler {
     @Value("${maxFileSize}")
     private int maxFileSize;
 
+    /**
+     * Need to stop scan if the server doesn't work
+     */
     public void serverUnavailableScan() {
         Platform.runLater(new Runnable() {
             @Override
@@ -38,6 +41,9 @@ public class ExceptionHandler {
         });
     }
 
+    /**
+     * Just inform user that server doesn't work
+     */
     public void serverUnavailable() {
         Platform.runLater(new Runnable() {
             @Override
@@ -47,13 +53,16 @@ public class ExceptionHandler {
         });
     }
 
+    /**
+     * Inform a user that a file or files have a size which isn't allowed
+     * Allowed size is defined in the scan.property
+     */
     public void fileTooBig(File file) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 LOGGER.info(ms.getMessage("logger.fileSizeLogger", new Object[]{file.getName()}, getLocale()));
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                mainController.stopScanning();
                 setAlertTitles(alert,
                         ms.getMessage(
                                 "error.fileSizeTitle", null, getLocale()),
@@ -67,6 +76,9 @@ public class ExceptionHandler {
         });
     }
 
+    /**
+     * User try to register the email which has already existed
+     */
     public void userNotValid(String responseBody) {
         LOGGER.info("Bad email " + responseBody);
 

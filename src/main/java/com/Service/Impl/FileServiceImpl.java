@@ -73,10 +73,6 @@ public class FileServiceImpl implements FileService {
         backUpService.deleteBackUpFile(file_id);
     }
 
-    public FileScanner getScanner() {
-        return scanner;
-    }
-
     public Locale getLocale() {
         LOGGER.debug("Current locale is ---> " + LocaleContextHolder.getLocale());
         return LocaleContextHolder.getLocale();
