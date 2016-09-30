@@ -1,0 +1,13 @@
+.root {
+    -fx-background-color: cadetblue;
+}
+
+#btnOk {
+    -fx-graphic: url("/img/ok.png");
+    -fx-padding: 0;
+}
+
+#btnCancel {
+    -fx-graphic: url("/img/exit.png");
+    -fx-padding: 0;
+}

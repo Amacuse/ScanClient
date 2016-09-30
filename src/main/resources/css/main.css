@@ -1,0 +1,27 @@
+.root {
+    -fx-background-color: cadetblue;
+}
+
+.progress-bar:indeterminate .bar {
+    -fx-background-color: lightskyblue;
+    -fx-background-insets: 8px;
+}
+
+.progress-bar .track {
+    -fx-background-insets: 8px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#show {
+    -fx-graphic: url("/img/searchicon.png");
+    -fx-padding: 0;
+}
+
+#delete {
+    -fx-graphic: url("/img/remove.png");
+    -fx-padding: 0;
+}
+#userAva{
+    -fx-padding: 0;
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com"/>
+    <context:property-placeholder location="scan.properties"/>
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+          p:basename="classpath:messages"
+          p:fileEncodings="UTF-8"
+          p:defaultEncoding="UTF-8"/>
+
+
+    <bean id="service" class="java.util.concurrent.ThreadPoolExecutor">
+        <constructor-arg index="0" value="10"/>
+        <constructor-arg index="1" value="30"/>
+        <constructor-arg index="2" value="30"/>
+        <constructor-arg index="3" value="SECONDS">
+        </constructor-arg>
+        <constructor-arg index="4">
+            <bean class="java.util.concurrent.LinkedBlockingQueue">
+                <constructor-arg index="0" value="3"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="5">
+            <bean class="java.util.concurrent.ThreadPoolExecutor$AbortPolicy"/>
+        </constructor-arg>
+    </bean>
+</beans>

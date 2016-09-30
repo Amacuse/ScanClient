@@ -1,0 +1,19 @@
+.root {
+    -fx-background-color: cadetblue;
+}
+
+#btSave {
+    -fx-graphic: url("/img/save.png");
+    -fx-padding: 0;
+}
+
+#btDelete {
+    -fx-graphic: url("/img/removeSaved.png");
+    -fx-padding: 0;
+}
+
+#btCancel {
+    -fx-graphic: url("/img/exit.png");
+    -fx-padding: 0;
+
+}
