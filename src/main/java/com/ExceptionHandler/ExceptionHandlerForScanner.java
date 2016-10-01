@@ -15,9 +15,9 @@ import java.io.File;
 import java.util.Locale;
 
 @Component
-public class ExceptionHandler {
+public class ExceptionHandlerForScanner {
 
-    private static final Logger LOGGER = LogManager.getLogger(ExceptionHandler.class);
+    private static final Logger LOGGER = LogManager.getLogger(ExceptionHandlerForScanner.class);
 
     @Autowired
     private MainController mainController;

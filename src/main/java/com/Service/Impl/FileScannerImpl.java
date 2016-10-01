@@ -1,7 +1,7 @@
 package com.Service.Impl;
 
 import com.Bean.ScanSettings;
-import com.ExceptionHandler.ExceptionHandler;
+import com.ExceptionHandler.ExceptionHandlerForScanner;
 import com.Service.Interface.BackUpService;
 import com.Service.Interface.FileScanner;
 import org.apache.commons.io.FileUtils;
@@ -28,7 +28,7 @@ public class FileScannerImpl implements FileScanner {
     @Autowired
     private BackUpService backUpService;
     @Autowired
-    private ExceptionHandler exceptionHandler;
+    private ExceptionHandlerForScanner exceptionHandlerForScanner;
     @Autowired
     private MessageSource ms;
 
@@ -104,7 +104,7 @@ public class FileScannerImpl implements FileScanner {
 
     private boolean isBig(File file) {
         if (file.length() > maxFileSize) {
-            exceptionHandler.fileTooBig(file);
+            exceptionHandlerForScanner.fileTooBig(file);
             return true;
         }
         return false;

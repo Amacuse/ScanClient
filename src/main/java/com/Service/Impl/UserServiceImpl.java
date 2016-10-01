@@ -1,7 +1,7 @@
 package com.Service.Impl;
 
 import com.Bean.User;
-import com.ExceptionHandler.ExceptionHandler;
+import com.ExceptionHandler.ExceptionHandlerForScanner;
 import com.Service.Interface.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Value("${urlForUser}")
     private String url;
     @Autowired
-    private ExceptionHandler exceptionHandler;
+    private ExceptionHandlerForScanner exceptionHandlerForScanner;
     @Autowired
     private User user;
 
@@ -42,10 +42,10 @@ public class UserServiceImpl implements UserService {
         } catch (HttpClientErrorException e) {
             String responseMessage = e.getResponseBodyAsString();
             LOGGER.debug("Response error: " + responseMessage);
-            exceptionHandler.userNotValid(responseMessage);
+            exceptionHandlerForScanner.userNotValid(responseMessage);
             return false;
         } catch (RestClientException e) {
-            exceptionHandler.serverUnavailable();
+            exceptionHandlerForScanner.serverUnavailable();
             return false;
         }
 

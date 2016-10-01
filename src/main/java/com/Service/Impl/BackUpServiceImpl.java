@@ -2,7 +2,7 @@ package com.Service.Impl;
 
 import com.Bean.FileDTO;
 import com.Bean.User;
-import com.ExceptionHandler.ExceptionHandler;
+import com.ExceptionHandler.ExceptionHandlerForScanner;
 import com.Service.Interface.BackUpService;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -41,7 +41,7 @@ public class BackUpServiceImpl implements BackUpService {
     @Autowired
     private ExecutorService executorService;
     @Autowired
-    private ExceptionHandler exceptionHandler;
+    private ExceptionHandlerForScanner exceptionHandlerForScanner;
     @Autowired
     private MessageSource ms;
 
@@ -98,7 +98,7 @@ public class BackUpServiceImpl implements BackUpService {
                     tmpMap.put(fileName + DateTime.now().getMillis(), fileDTO);
                     //for avoiding multipopup windows
                     if (available.getAndSet(false)) {
-                        exceptionHandler.serverUnavailableScan();
+                        exceptionHandlerForScanner.serverUnavailableScan();
                     }
                 }
             }
@@ -117,7 +117,7 @@ public class BackUpServiceImpl implements BackUpService {
         if (response != null && response.getStatusCode() == HttpStatus.OK) {
             return new ArrayList<>(Arrays.asList(response.getBody()));
         } else {
-            exceptionHandler.serverUnavailable();
+            exceptionHandlerForScanner.serverUnavailable();
             return Collections.<FileDTO>emptyList();
         }
     }
@@ -127,7 +127,7 @@ public class BackUpServiceImpl implements BackUpService {
         try {
             new RestTemplate().delete(urlForDelete, user.getId(), file_id);
         } catch (RestClientException e) {
-            exceptionHandler.serverUnavailable();
+            exceptionHandlerForScanner.serverUnavailable();
         }
 
     }

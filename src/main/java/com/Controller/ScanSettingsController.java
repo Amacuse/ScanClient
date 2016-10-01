@@ -194,17 +194,21 @@ public class ScanSettingsController implements Initializable {
     private void changeWindowLanguage() {
         Locale locale = getLocale();
 
+        //Label
         lbWorkDir.setText(ms.getMessage("text.settings.labelWorkDir", null, locale));
         lbFileExt.setText(ms.getMessage("text.settings.labelFileExt", null, locale));
         lbScanTime.setText(ms.getMessage("text.settings.labelScanTimeOut", null, locale));
 
+        //Text for text placeholder
         txtExtension.setPromptText(ms.getMessage("text.settings.txtFieldExtPrompt", null, locale));
         txtScanTime.setPromptText(ms.getMessage("text.settings.txtFieldScanTime", null, locale));
 
+        //Radio button
         chSec.setText(ms.getMessage("text.settings.chSec", null, locale));
         chMin.setText(ms.getMessage("text.settings.chMin", null, locale));
         chHr.setText(ms.getMessage("text.settings.chHr", null, locale));
 
+        //Choose directory button
         btnChooseDirectory.setText(ms.getMessage("text.settings.directoryChooserTitle", null, locale));
     }
 

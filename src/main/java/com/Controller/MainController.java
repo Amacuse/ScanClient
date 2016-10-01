@@ -113,10 +113,14 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //load the icons
         lock = new ImageView("/img/lock.png");
         unlock = new ImageView("/img/unlock.png");
+        //define contents for table view
         tableColumn.setCellValueFactory(new PropertyValueFactory<FileDTO, String>("fileName"));
+        //define how many rows can be selected.In our case there is only one row can be selected
         savedFileTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        //add the listener to the table view.Just makes the 'show' and 'delete' buttons visible
         savedFileTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<FileDTO>() {
             @Override
             public void changed(ObservableValue<? extends FileDTO> observable, FileDTO oldValue, FileDTO newValue) {
@@ -129,11 +133,16 @@ public class MainController implements Initializable {
                 }
             }
         });
+
+        //change the user icon depends on
+        //whether the user is specified or not
         if (user.getId() != null) {
             userAva.setGraphic(unlock);
         } else {
             userAva.setGraphic(lock);
         }
+
+        //determine the scanning settings
         if (scanSettings.getWorkDirectory() != null) {
             setUserLocale();
             setUserSettings();
@@ -142,32 +151,44 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Start to scan
+     */
     public void startScanning() throws IOException {
+        //verify that the user is determined
         if (user.getId() == null) {
             setUser();
         }
+        //verify that the scan settings are determined
         if (scanSettings.getWorkDirectory() == null) {
             setSettings();
         }
         if (user.getId() != null && scanSettings.getWorkDirectory() != null) {
             progress.setVisible(true);
-            setUserSettings();
             fileService.startScan();
         }
     }
 
+    /**
+     * Stop to scan
+     */
     public void stopScanning() {
         progress.setVisible(false);
         fileService.stopScan();
     }
 
 
+    /***
+     * The user setup
+     */
     public void setUser() {
         try {
             prepareModalityWindow("/fx/userSettings.fxml", "Title");
         } catch (IOException e) {
             /*NOP*/
         }
+        //change the icon of the user
+        //which means whether user is determined or not
         if (user.getId() != null) {
             userAva.setGraphic(unlock);
         } else {
@@ -175,14 +196,22 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Window for setup a scan settings
+     */
     public void setSettings() throws IOException {
         prepareModalityWindow("/fx/scanSettings.fxml",
                 ms.getMessage("settingsWindowTitle", null, getLocale()));
         setUserSettings();
     }
 
+    /**
+     * Get the list of the saved files from the server
+     */
     public void getSavedFiles() {
+        //verify that the user is determined
         if (user.getId() == null) {
+            //if it's not redirect to the user setup
             setUser();
         }
         if (user.getId() != null) {
@@ -190,7 +219,11 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Get the saved copies of the file or remove the file from the server
+     */
     public void actionWithFile(ActionEvent actionEvent) throws IOException {
+        //get selected file
         FileDTO fileDTO = savedFileTable.getSelectionModel().getSelectedItem();
         if (actionEvent.getTarget() == show) {
             //retrieve all of the saved copies of the particular file
@@ -218,11 +251,16 @@ public class MainController implements Initializable {
             }
             stage.showAndWait();
         } else {
+            //remove the file from the server
             fileService.deleteFile(fileDTO.getId());
+            //remove the file from the table view
             savedFileTable.getItems().remove(fileDTO);
         }
     }
 
+    /**
+     * Set english language
+     */
     public void setEnglish() {
         languageView.setImage(new Image("/img/en.png"));
         LocaleContextHolder.setLocale(Locale.ENGLISH);
@@ -230,6 +268,9 @@ public class MainController implements Initializable {
         changeWindowLanguage();
     }
 
+    /**
+     * Set russian language
+     */
     public void setRussian() {
         languageView.setImage(new Image("/img/ru.png"));
         Locale locale = new Locale("ru", "RU");
@@ -238,6 +279,9 @@ public class MainController implements Initializable {
         changeWindowLanguage();
     }
 
+    /**
+     * Setup the user settings
+     */
     public void setUserSettings() {
         if (scanSettings.getWorkDirectory() != null) {
             lbScanDirVal.setText(scanSettings.getWorkDirectory());
@@ -247,9 +291,13 @@ public class MainController implements Initializable {
         }
     }
 
-    public void setUserLocale() {
+    /**
+     * Set the saved locale
+     */
+    private void setUserLocale() {
         Locale locale = scanSettings.getLocale();
         LOGGER.debug("User saved locale is ---> " + locale);
+        //english locale is default
         if (new Locale("ru", "RU").equals(locale)) {
             setRussian();
         } else {
@@ -257,7 +305,10 @@ public class MainController implements Initializable {
         }
     }
 
-    public void changeWindowLanguage() {
+    /**
+     * Change the window language
+     */
+    private void changeWindowLanguage() {
         Locale currentLocale = getLocale();
         //Menu
         //*File
@@ -292,12 +343,18 @@ public class MainController implements Initializable {
         lbScanTime.setText(ms.getMessage("text.labelScanTimeOut", null, currentLocale));
     }
 
-    public Locale getLocale() {
+    /**
+     * Retrieve a locale from the context
+     */
+    private Locale getLocale() {
         LOGGER.debug("Current locale is ---> " + LocaleContextHolder.getLocale());
         return LocaleContextHolder.getLocale();
     }
 
-    public void prepareModalityWindow(String fxmlDestination, String windowTitle) throws IOException {
+    /**
+     * Prepare a modality window
+     */
+    private void prepareModalityWindow(String fxmlDestination, String windowTitle) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxmlDestination));
         Stage stage = new Stage();
         stage.setTitle(windowTitle);
@@ -309,6 +366,9 @@ public class MainController implements Initializable {
         stage.showAndWait();
     }
 
+    /**
+     * Exit
+     */
     public void exit() {
         Platform.exit();
     }

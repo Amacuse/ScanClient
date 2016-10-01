@@ -55,15 +55,21 @@ public class UserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //for i18n
         changeWindowLanguage();
     }
 
+    /**
+     * The button for save a user
+     */
     public void saveUser() {
         boolean validate = true;
+        //get locale for i18n
         Locale currentLocale = getLocale();
 
         String name = txtName.getText().trim();
         LOGGER.debug("User enters name: " + name);
+        //only letters and numbers are available
         if (name.isEmpty() || !name.matches("[\\w]+") || name.length() > 15) {
             validate = false;
             nameValidate.setText(ms.getMessage("userController.label.nameValidate", null, currentLocale));
@@ -73,6 +79,7 @@ public class UserController implements Initializable {
 
         String email = txtEmail.getText().trim();
         LOGGER.debug("User enters email: " + email);
+        //validate for an appropriate user email
         if (email.isEmpty() || !email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*" +
                 "@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
             validate = false;
@@ -81,6 +88,7 @@ public class UserController implements Initializable {
             emailValidate.setText("");
         }
 
+        //get a date from the date picker
         java.time.LocalDate value = txtBirthday.getValue();
         LocalDate birthday = null;
         if (value == null) {
@@ -90,7 +98,8 @@ public class UserController implements Initializable {
             String localDate = value.toString();
             LOGGER.debug("User enters birthday: " + localDate);
             birthday = LocalDate.parse(localDate);
-            if ((LocalDate.now().getYear() - birthday.getYear()) > 80) {
+            //a users older then '80' don't need this staff
+            if ((LocalDate.now().getYear() - birthday.getYear()) > 90) {
                 validate = false;
                 dateValidate.setText(ms.getMessage("userController.label.birthdayValidate", null, currentLocale));
             } else {
@@ -98,6 +107,7 @@ public class UserController implements Initializable {
             }
         }
 
+        //if everything is ok send the request to the server
         if (validate) {
             lbDBConnect.setVisible(true);
             progress.setVisible(true);
@@ -106,18 +116,23 @@ public class UserController implements Initializable {
             user.setEmail(email);
             user.setBirthday(birthday);
 
-
             boolean confirmation = service.saveUser(user);
 
             lbDBConnect.setVisible(false);
             progress.setVisible(false);
 
+            //if there are some problems, whether the server is unavailable
+            // or a user chose the email which has already been on the server,
+            //don't close the window
             if (confirmation) {
                 cancel();
             }
         }
     }
 
+    /**
+     * Change the window language
+     */
     public void changeWindowLanguage() {
         Locale currentLocale = getLocale();
 
@@ -127,10 +142,16 @@ public class UserController implements Initializable {
         lbBirthday.setText(ms.getMessage("userController.label.birthday", null, currentLocale));
     }
 
+    /**
+     * Retrieve a locale from the context
+     */
     public Locale getLocale() {
         return LocaleContextHolder.getLocale();
     }
 
+    /**
+     * Close the window
+     */
     public void cancel() {
         ((Stage) cancel.getScene().getWindow()).close();
     }

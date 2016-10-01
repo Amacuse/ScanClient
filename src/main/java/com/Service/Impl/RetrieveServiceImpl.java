@@ -3,7 +3,7 @@ package com.Service.Impl;
 import com.Bean.FileDTO;
 import com.Bean.ContentIdAndDate;
 import com.Bean.User;
-import com.ExceptionHandler.ExceptionHandler;
+import com.ExceptionHandler.ExceptionHandlerForScanner;
 import com.Service.Interface.RetrieveService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +31,7 @@ public class RetrieveServiceImpl implements RetrieveService {
     @Autowired
     private MessageSource ms;
     @Autowired
-    private ExceptionHandler exceptionHandler;
+    private ExceptionHandlerForScanner exceptionHandlerForScanner;
     @Autowired
     private User user;
 
@@ -60,7 +60,7 @@ public class RetrieveServiceImpl implements RetrieveService {
             }
             return result;
         } else {
-            exceptionHandler.serverUnavailable();
+            exceptionHandlerForScanner.serverUnavailable();
             return Collections.<ContentIdAndDate>emptyList();
         }
     }
@@ -79,7 +79,7 @@ public class RetrieveServiceImpl implements RetrieveService {
         if (response != null && response.getStatusCode() == HttpStatus.OK) {
             return response.getBody();
         } else {
-            exceptionHandler.serverUnavailable();
+            exceptionHandlerForScanner.serverUnavailable();
             return new FileDTO();
         }
     }
@@ -90,7 +90,7 @@ public class RetrieveServiceImpl implements RetrieveService {
         try {
             new RestTemplate().delete(urlForContent, user.getId(), stub, content_id);
         } catch (RestClientException e) {
-            exceptionHandler.serverUnavailable();
+            exceptionHandlerForScanner.serverUnavailable();
         }
     }
 
