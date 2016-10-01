@@ -5,7 +5,6 @@ import com.Bean.ContentIdAndDate;
 import com.Bean.User;
 import com.Bean.ScanSettings;
 import com.Service.Interface.FileService;
-import com.Service.Interface.MainService;
 import com.Service.Interface.RetrieveService;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -38,7 +37,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 @Component
-public class MainController implements MainService, Initializable {
+public class MainController implements Initializable {
 
     private static final Logger LOGGER = LogManager.getLogger(MainController.class);
 
@@ -310,7 +309,6 @@ public class MainController implements MainService, Initializable {
         stage.showAndWait();
     }
 
-    @Override
     public void exit() {
         Platform.exit();
     }

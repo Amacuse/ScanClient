@@ -20,9 +20,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-public class UserSettingsController implements Initializable {
+public class ScanSettingsController implements Initializable {
 
-    private static final Logger LOGGER = LogManager.getLogger(UserSettingsController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ScanSettingsController.class);
 
     private ScanSettings settings = SpringFxmlLoader.getContext().getBean("scanSettings", ScanSettings.class);
     private MessageSource ms = SpringFxmlLoader.getContext().getBean("messageSource", MessageSource.class);
@@ -63,12 +63,15 @@ public class UserSettingsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //for i18n
         changeWindowLanguage();
+        //populate scan settings if they are
         if (settings.getWorkDirectory() != null) {
             txtDirectory.setText(settings.getWorkDirectory());
             directoryPath = settings.getWorkDirectory();
             txtExtension.setText(settings.getFileExtension());
             txtScanTime.setText(String.valueOf(settings.getScanTimeOut()));
+            //setup radio button flag
             switch (settings.getTimeUnit()) {
                 case SECONDS:
                     chSec.fire();
@@ -83,6 +86,9 @@ public class UserSettingsController implements Initializable {
         }
     }
 
+    /**
+     * Verify and populate scan settings
+     */
     public void setSettings(ActionEvent actionEvent) {
         if (actionEvent.getSource() == btnOk) {
 
@@ -93,43 +99,42 @@ public class UserSettingsController implements Initializable {
                 directoryValidate.setText("");
             } else {
                 validate = false;
-                directoryValidate.setText(
-                        ms.getMessage("error.directory", null, getLocale()));
+                directoryValidate.setText(ms.getMessage("error.directory", null, getLocale()));
             }
 
             //Validate extension
             String extension = txtExtension.getText().toLowerCase();
+            //only letters are available
             if (extension.matches("[a-z]+")) {
                 extensionValidate.setText("");
             } else {
                 LOGGER.debug(ms.getMessage("error.settings.extension", new Object[]{extension}, getLocale()));
                 validate = false;
-                extensionValidate.setText(
-                        ms.getMessage("error.extension", null, getLocale()));
+                extensionValidate.setText(ms.getMessage("error.extension", null, getLocale()));
             }
 
             //Validate time-out
             int scanTime = 0;
             try {
                 scanTime = Integer.parseInt(txtScanTime.getText());
+                //must be positive
                 if (scanTime > 0) {
                     timeOutValidate.setText("");
                 } else {
                     LOGGER.debug(ms.getMessage("error.settings.scanTimeOut", new Object[]{scanTime}, getLocale()));
                     validate = false;
-                    timeOutValidate.setText(
-                            ms.getMessage("error.timeOutNegative", null, getLocale()));
+                    timeOutValidate.setText(ms.getMessage("error.timeOutNegative", null, getLocale()));
                 }
             } catch (NumberFormatException e) {
                 LOGGER.debug(ms.getMessage("error.settings.scanTimeOut", new Object[]{scanTime}, getLocale()));
                 validate = false;
-                timeOutValidate.setText(
-                        ms.getMessage("error.timeOutNotNumber", null, getLocale()));
+                timeOutValidate.setText(ms.getMessage("error.timeOutNotNumber", null, getLocale()));
             }
 
             //Check TimeUnit flag
             if (settings.getTimeUnit() == null) {
                 validate = false;
+                //inform user that time unit flag must be setup
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setHeaderText(null);
                 alert.setContentText(ms.getMessage("error.timeUnit", null, getLocale()));
@@ -142,17 +147,22 @@ public class UserSettingsController implements Initializable {
                 settings.setFileExtension(extension);
                 settings.setScanTimeOut(scanTime);
 
-                Stage stage = (Stage) btnCancel.getScene().getWindow();
-                stage.close();
+                //close the window
+                ((Stage) btnCancel.getScene().getWindow()).close();
             }
 
         } else {
+            //if user press 'Cancel' and before that has changed the time unit flag
+            //return the saved one
             settings.setTimeUnit(previousTimeUnit);
-            Stage stage = (Stage) btnCancel.getScene().getWindow();
-            stage.close();
+            //close the window
+            ((Stage) btnCancel.getScene().getWindow()).close();
         }
     }
 
+    /**
+     * Choose a directory for scan
+     */
     public void chooseDirectory() {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle(ms.getMessage("text.settings.directoryChooserTitle", null, getLocale()));
@@ -164,6 +174,9 @@ public class UserSettingsController implements Initializable {
         }
     }
 
+    /**
+     * Choose a time unit for the scan timeout
+     */
     public void setTimeUnitForScanTime(ActionEvent actionEvent) {
         EventTarget target = actionEvent.getTarget();
         if (target == chSec) {
@@ -175,7 +188,10 @@ public class UserSettingsController implements Initializable {
         }
     }
 
-    public void changeWindowLanguage() {
+    /**
+     * Change the window language
+     */
+    private void changeWindowLanguage() {
         Locale locale = getLocale();
 
         lbWorkDir.setText(ms.getMessage("text.settings.labelWorkDir", null, locale));
@@ -192,7 +208,10 @@ public class UserSettingsController implements Initializable {
         btnChooseDirectory.setText(ms.getMessage("text.settings.directoryChooserTitle", null, locale));
     }
 
-    public Locale getLocale() {
+    /**
+     * Retrieve a locale from the context
+     */
+    private Locale getLocale() {
         return LocaleContextHolder.getLocale();
     }
 }

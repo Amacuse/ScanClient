@@ -6,7 +6,7 @@ import com.Bean.ContentIdAndDate;
 import java.util.List;
 
 public interface RetrieveService {
-    List<ContentIdAndDate> getFileCopies(Long fileName);
+    List<ContentIdAndDate> getFileCopies(Long file_id);
 
     FileDTO getSelectedFile(Long content_id);
 
