@@ -35,6 +35,9 @@ public class FileScannerImpl implements FileScanner {
     private Map<String, Long> fileMap = new HashMap<>();
     private volatile boolean scan;
 
+    /**
+     * The primary method of the application
+     */
     @Override
     public Void call() throws InterruptedException {
         while (scan) {
@@ -102,6 +105,9 @@ public class FileScannerImpl implements FileScanner {
         return null;
     }
 
+    /**
+     * Verify the file size
+     */
     private boolean isBig(File file) {
         if (file.length() > maxFileSize) {
             exceptionHandlerForScanner.fileTooBig(file);

@@ -8,7 +8,7 @@ public interface FileService {
 
     void stopScan();
 
-    void addAllSavedFiles(TableView<FileDTO> tableView);
+    void getFiles(TableView<FileDTO> tableView);
 
     void deleteFile(Long file_id);
 }

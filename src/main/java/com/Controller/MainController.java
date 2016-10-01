@@ -215,7 +215,7 @@ public class MainController implements Initializable {
             setUser();
         }
         if (user.getId() != null) {
-            fileService.addAllSavedFiles(savedFileTable);
+            fileService.getFiles(savedFileTable);
         }
     }
 

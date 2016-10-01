@@ -48,6 +48,9 @@ public class BackUpServiceImpl implements BackUpService {
     private Map<String, FileDTO> tmpMap = new ConcurrentHashMap<>();
     private AtomicBoolean available = new AtomicBoolean(true);
 
+    /**
+     * If for now the server is unavailable save the files in temporary map and try to send them later
+     */
     @Override
     public void sendDept() {
         executorService.execute(new Runnable() {
@@ -61,6 +64,7 @@ public class BackUpServiceImpl implements BackUpService {
                     } catch (RestClientException e) {
                     /*NOP*/
                     }
+                    //if everything is ok remove the files from the map
                     if (response != null && response.getStatusCode() == HttpStatus.OK) {
                         tmpMap.remove(entry.getKey());
                     }
@@ -69,6 +73,9 @@ public class BackUpServiceImpl implements BackUpService {
         });
     }
 
+    /**
+     * Send file to the server
+     */
     @Override
     public void backUpFile(File file) {
         //create independent thread for sending modified file to the server
@@ -96,7 +103,7 @@ public class BackUpServiceImpl implements BackUpService {
                     //server is unavailable.Put modified files in the temporary map
                     //for further sending to the server
                     tmpMap.put(fileName + DateTime.now().getMillis(), fileDTO);
-                    //for avoiding multipopup windows
+                    //avoid multipopup windows
                     if (available.getAndSet(false)) {
                         exceptionHandlerForScanner.serverUnavailableScan();
                     }
@@ -105,6 +112,9 @@ public class BackUpServiceImpl implements BackUpService {
         });
     }
 
+    /**
+     * Retrieve the files from the server
+     */
     @Override
     public List<FileDTO> getAllBackUpFiles() throws ExecutionException, InterruptedException {
         ResponseEntity<FileDTO[]> response = null;
@@ -122,6 +132,9 @@ public class BackUpServiceImpl implements BackUpService {
         }
     }
 
+    /**
+     * Remove the files from the server
+     */
     @Override
     public void deleteBackUpFile(Long file_id) {
         try {
@@ -141,7 +154,6 @@ public class BackUpServiceImpl implements BackUpService {
     }
 
     public Locale getLocale() {
-        LOGGER.debug("Current locale is ---> " + LocaleContextHolder.getLocale());
         return LocaleContextHolder.getLocale();
     }
 }

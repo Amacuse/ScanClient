@@ -51,15 +51,18 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void addAllSavedFiles(TableView<FileDTO> tableView) {
-        //create independent thread for retrieving all the previously saved files
+    public void getFiles(TableView<FileDTO> tableView) {
+        //create an independent thread for retrieving all the previously saved files
         service.execute(new Runnable() {
             @Override
             public void run() {
                 try {
+                    //clear all previously files to avoid duplication
                     ObservableList<FileDTO> items = tableView.getItems();
                     items.clear();
+                    //get the files from the server
                     List<FileDTO> backUpFiles = backUpService.getAllBackUpFiles();
+                    //add to the table view
                     items.addAll(backUpFiles);
                 } catch (ExecutionException | InterruptedException e) {
                     LOGGER.info(ms.getMessage("fileService.logger.getAllFiles", new Object[]{e}, getLocale()));
@@ -73,7 +76,7 @@ public class FileServiceImpl implements FileService {
         backUpService.deleteBackUpFile(file_id);
     }
 
-    public Locale getLocale() {
+    private Locale getLocale() {
         LOGGER.debug("Current locale is ---> " + LocaleContextHolder.getLocale());
         return LocaleContextHolder.getLocale();
     }
