@@ -88,6 +88,7 @@ public class ContextStartEventHandler implements ApplicationListener<ContextStar
                 user.setName(deserializeUser.getName());
                 user.setEmail(deserializeUser.getEmail());
                 user.setBirthday(deserializeUser.getBirthday());
+                user.setPassword(deserializeUser.getPassword());
             } catch (FileNotFoundException e) {
                 /*existence has been verified*/
                 LOGGER.info("Something has gone wrong when the user scanSettingsFile has been read: " + e);
