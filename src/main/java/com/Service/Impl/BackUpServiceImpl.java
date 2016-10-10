@@ -1,7 +1,6 @@
 package com.Service.Impl;
 
 import com.Bean.FileDTO;
-import com.Bean.User;
 import com.ExceptionHandler.ExceptionHandlerForScanner;
 import com.Service.Interface.BackUpService;
 import org.apache.commons.io.FileUtils;
@@ -12,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
-public class BackUpServiceImpl implements BackUpService {
+public class BackUpServiceImpl extends HeaderServiceImpl implements BackUpService {
 
     private static final Logger LOGGER = LogManager.getLogger(BackUpServiceImpl.class);
 
@@ -36,8 +37,6 @@ public class BackUpServiceImpl implements BackUpService {
     @Value("${urlForFileDelete}")
     private String urlForDelete;
 
-    @Autowired
-    private User user;
     @Autowired
     private ExecutorService executorService;
     @Autowired
@@ -57,10 +56,11 @@ public class BackUpServiceImpl implements BackUpService {
             @Override
             public void run() {
                 for (Map.Entry<String, FileDTO> entry : tmpMap.entrySet()) {
+                    HttpEntity<FileDTO> entity = buildAuthorizationHeader(entry.getValue());
                     ResponseEntity<String> response = null;
                     try {
                         response = new RestTemplate()
-                                .postForEntity(url, entry.getValue(), String.class, user.getId());
+                                .exchange(url, HttpMethod.POST, entity, String.class, getUser().getId());
                     } catch (RestClientException e) {
                     /*NOP*/
                     }
@@ -92,10 +92,11 @@ public class BackUpServiceImpl implements BackUpService {
                             "backUpService.logger.deletedFile", new Object[]{fileName, e}, getLocale()));
                 }
                 FileDTO fileDTO = new FileDTO(fileName, bytes);
+                HttpEntity<FileDTO> entity = buildAuthorizationHeader(fileDTO);
                 ResponseEntity<String> response = null;
                 try {
                     response = new RestTemplate()
-                            .postForEntity(url, fileDTO, String.class, user.getId());
+                            .exchange(url, HttpMethod.POST, entity, String.class, getUser().getId());
                 } catch (RestClientException e) {
                     /*NOP*/
                 }
@@ -117,10 +118,11 @@ public class BackUpServiceImpl implements BackUpService {
      */
     @Override
     public List<FileDTO> getAllBackUpFiles() throws ExecutionException, InterruptedException {
+        HttpEntity<Object> entity = buildAuthorizationHeader(null);
         ResponseEntity<FileDTO[]> response = null;
         try {
-            response = new RestTemplate().getForEntity(
-                    url, FileDTO[].class, user.getId());
+            response = new RestTemplate().exchange(
+                    url, HttpMethod.GET, entity, FileDTO[].class, getUser().getId());
         } catch (RestClientException e) {
             /*NOP*/
         }
@@ -138,7 +140,7 @@ public class BackUpServiceImpl implements BackUpService {
     @Override
     public void deleteBackUpFile(Long file_id) {
         try {
-            new RestTemplate().delete(urlForDelete, user.getId(), file_id);
+            new RestTemplate().delete(urlForDelete, getUser().getId(), file_id);
         } catch (RestClientException e) {
             exceptionHandlerForScanner.serverUnavailable();
         }

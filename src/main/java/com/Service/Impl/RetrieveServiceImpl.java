@@ -2,7 +2,6 @@ package com.Service.Impl;
 
 import com.Bean.ContentIdAndDate;
 import com.Bean.FileDTO;
-import com.Bean.User;
 import com.ExceptionHandler.ExceptionHandlerForScanner;
 import com.Service.Interface.RetrieveService;
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +10,8 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -23,14 +24,12 @@ import java.util.List;
 import java.util.Locale;
 
 @Component
-public class RetrieveServiceImpl implements RetrieveService {
+public class RetrieveServiceImpl extends HeaderServiceImpl implements RetrieveService {
 
     private static final Logger LOGGER = LogManager.getLogger(RetrieveServiceImpl.class);
 
     @Autowired
     private ExceptionHandlerForScanner exceptionHandlerForScanner;
-    @Autowired
-    private User user;
 
     @Value("${urlForFileCopies}")
     private String urlForCopies;
@@ -42,10 +41,11 @@ public class RetrieveServiceImpl implements RetrieveService {
      */
     @Override
     public List<ContentIdAndDate> getFileCopies(Long file_id) {
+        HttpEntity<Object> entity = buildAuthorizationHeader(null);
         ResponseEntity<FileDTO[]> response = null;
         try {
             response = new RestTemplate()
-                    .getForEntity(urlForCopies, FileDTO[].class, user.getId(), file_id);
+                    .exchange(urlForCopies, HttpMethod.GET, entity, FileDTO[].class, getUser().getId(), file_id);
         } catch (RestClientException e) {
                     /*NOP*/
         }
@@ -73,10 +73,11 @@ public class RetrieveServiceImpl implements RetrieveService {
     public FileDTO getSelectedFile(Long content_id) {
         //just need for url
         Long stub = 17L;
+        HttpEntity<Object> entity = buildAuthorizationHeader(null);
         ResponseEntity<FileDTO> response = null;
         try {
             response = new RestTemplate()
-                    .getForEntity(urlForContent, FileDTO.class, user.getId(), stub, content_id);
+                    .exchange(urlForContent, HttpMethod.GET, entity, FileDTO.class, getUser().getId(), stub, content_id);
         } catch (RestClientException e) {
                     /*NOP*/
         }
@@ -96,8 +97,9 @@ public class RetrieveServiceImpl implements RetrieveService {
     public void deleteSelectedFile(Long content_id) {
         //just need for url
         Long stub = 17L;
+        HttpEntity<Object> entity = buildAuthorizationHeader(null);
         try {
-            new RestTemplate().delete(urlForContent, user.getId(), stub, content_id);
+            new RestTemplate().exchange(urlForContent, HttpMethod.DELETE, entity, String.class, getUser().getId(), stub, content_id);
         } catch (RestClientException e) {
             exceptionHandlerForScanner.serverUnavailable();
         }
